@@ -7,6 +7,7 @@ from pathlib import Path
 from ai_worker.reframing.ffmpeg_render import cut_clip, render_vertical_with_subs
 from ai_worker.scoring.highlight_scoring import rerank_with_llm, score_highlights, serialize_candidates
 from ai_worker.subtitles.ass_writer import write_ass
+from ai_worker.subtitles.translator import translate_segments_to_thai
 from ai_worker.whisper.transcriber import Segment, transcribe
 
 
@@ -25,6 +26,12 @@ def main() -> None:
     parser.add_argument("--output-dir", default="videos/output", help="Output directory")
     parser.add_argument("--model", default="medium", help="faster-whisper model")
     parser.add_argument("--top-k", type=int, default=3, help="Number of clips")
+    parser.add_argument(
+        "--subtitle-lang",
+        choices=["source", "th"],
+        default="source",
+        help="Subtitle language: source transcript or Thai translation",
+    )
     parser.add_argument(
         "--scoring",
         choices=["heuristic", "hybrid", "llm"],
@@ -54,6 +61,8 @@ def main() -> None:
 
         cut_clip(input_video, raw_clip, cand.start, cand.end)
         clip_segments = _segments_in_range(segments, cand.start, cand.end)
+        if args.subtitle_lang == "th":
+            clip_segments = translate_segments_to_thai(clip_segments)
         write_ass(clip_segments, ass_file)
         render_vertical_with_subs(raw_clip, ass_file, final_clip)
 

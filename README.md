@@ -7,6 +7,7 @@ Local MVP for AI highlight clipping based on your blueprint.
 - Scores likely highlight moments (heuristic or LLM hybrid rerank)
 - Cuts top clips with `ffmpeg`
 - Generates subtitles (`.ass`)
+- Optional Thai subtitle translation (`--subtitle-lang th`)
 - Renders 9:16 output clips with burned subtitles
 - Exports `timeline.json`
 
@@ -44,6 +45,12 @@ ffmpeg -version
 python -m ai_worker.main --input videos/input/your-video.mp4 --output-dir videos/output --model medium --top-k 3 --scoring hybrid
 ```
 
+Thai subtitle output:
+
+```powershell
+python -m ai_worker.main --input videos/input/your-video.mp4 --output-dir videos/output --model medium --top-k 3 --scoring hybrid --subtitle-lang th
+```
+
 ## Run
 Put your source file in `videos/input/`, then:
 
@@ -62,6 +69,8 @@ $env:LLM_API_KEY="your_api_key"
 $env:LLM_MODEL="gpt-4o-mini"
 $env:LLM_BASE_URL="https://api.openai.com/v1"
 ```
+
+Thai subtitle translation requires `LLM_API_KEY` as well. If not set, it falls back to source-language subtitles.
 
 ## Output
 - `videos/output/clip_01.mp4` ...
