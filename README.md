@@ -9,6 +9,7 @@ Local MVP for AI highlight clipping based on your blueprint.
 - Generates subtitles (`.ass`)
 - Optional Thai subtitle translation (`--subtitle-lang th`)
 - Optional Thai dubbing (`--dub-lang th --dub-mode replace`)
+  - For interview-style clips, dubbing uses two voices (male/female) by estimating speaker pitch per segment.
 - Renders 9:16 output clips with burned subtitles
 - Exports `timeline.json`
 
@@ -83,6 +84,8 @@ Thai dubbing also requires `LLM_API_KEY`. Optional TTS env:
 ```powershell
 $env:TTS_MODEL="gpt-4o-mini-tts"
 $env:TTS_VOICE="alloy"
+$env:TTS_MALE_VOICE="onyx"
+$env:TTS_FEMALE_VOICE="shimmer"
 ```
 
 ## Output

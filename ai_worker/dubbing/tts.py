@@ -6,11 +6,11 @@ from pathlib import Path
 import requests
 
 
-def synthesize_thai_voice(text: str, output_audio: Path) -> None:
+def synthesize_thai_voice(text: str, output_audio: Path, voice: str | None = None) -> None:
     api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
     base_url = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")
     model = os.getenv("TTS_MODEL", "tts-1")
-    voice = os.getenv("TTS_VOICE", "alloy")
+    selected_voice = voice or os.getenv("TTS_VOICE", "alloy")
     if not api_key:
         raise RuntimeError("Missing API key for dubbing. Set LLM_API_KEY or OPENAI_API_KEY.")
 
@@ -20,7 +20,7 @@ def synthesize_thai_voice(text: str, output_audio: Path) -> None:
 
     payload = {
         "model": model,
-        "voice": voice,
+        "voice": selected_voice,
         "input": cleaned,
         "format": "mp3",
     }

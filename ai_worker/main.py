@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from ai_worker.dubbing.tts import synthesize_thai_voice
+from ai_worker.dubbing.two_voice import build_two_voice_thai_dub_track
 from ai_worker.reframing.ffmpeg_render import cut_clip, render_vertical_with_subs
 from ai_worker.reframing.ffmpeg_render import replace_audio_track
 from ai_worker.scoring.highlight_scoring import rerank_with_llm, score_highlights, serialize_candidates
@@ -103,8 +103,7 @@ def main() -> None:
         clip_for_render = raw_clip
 
         if args.dub_lang == "th" and args.dub_mode == "replace":
-            thai_text = " ".join(seg.text for seg in thai_segments).strip()
-            synthesize_thai_voice(thai_text, dubbed_audio)
+            build_two_voice_thai_dub_track(raw_clip, thai_segments, dubbed_audio)
             replace_audio_track(raw_clip, dubbed_audio, dubbed_clip)
             clip_for_render = dubbed_clip
 
