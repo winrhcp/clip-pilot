@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 from ai_worker.dubbing.tts import synthesize_thai_voice
@@ -11,6 +12,20 @@ from ai_worker.scoring.highlight_scoring import rerank_with_llm, score_highlight
 from ai_worker.subtitles.ass_writer import write_ass
 from ai_worker.subtitles.translator import translate_segments_to_thai
 from ai_worker.whisper.transcriber import Segment, transcribe
+
+
+def _load_dotenv(dotenv_path: Path = Path(".env")) -> None:
+    if not dotenv_path.exists():
+        return
+    for raw_line in dotenv_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def _segments_in_range(segments: list[Segment], start: float, end: float) -> list[Segment]:
@@ -23,6 +38,8 @@ def _segments_in_range(segments: list[Segment], start: float, end: float) -> lis
 
 
 def main() -> None:
+    _load_dotenv()
+
     parser = argparse.ArgumentParser(description="AI Highlight Clipper MVP")
     parser.add_argument("--input", required=True, help="Path to input video")
     parser.add_argument("--output-dir", default="videos/output", help="Output directory")
