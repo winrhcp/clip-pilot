@@ -4,6 +4,12 @@ import subprocess
 from pathlib import Path
 
 
+def _escape_subtitles_path(path: Path) -> str:
+    raw = path.as_posix()
+    # ffmpeg filter parser on Windows needs escaped drive-colon.
+    return raw.replace(":", r"\:").replace("'", r"\'")
+
+
 def cut_clip(input_video: Path, output_clip: Path, start: float, end: float) -> None:
     duration = max(end - start, 1.0)
     cmd = [
@@ -19,10 +25,11 @@ def cut_clip(input_video: Path, output_clip: Path, start: float, end: float) -> 
 
 
 def render_vertical_with_subs(input_clip: Path, ass_file: Path, output_clip: Path) -> None:
+    escaped_ass = _escape_subtitles_path(ass_file)
     vf = (
         "scale=1080:1920:force_original_aspect_ratio=increase,"
         "crop=1080:1920,"
-        f"subtitles='{ass_file.as_posix()}'"
+        f"subtitles='{escaped_ass}'"
     )
     cmd = [
         "ffmpeg", "-y",

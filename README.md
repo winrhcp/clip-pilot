@@ -57,7 +57,7 @@ Thai dubbing (replace source audio):
 ```powershell
 python -m ai_worker.main --input videos/input/your-video.mp4 --output-dir videos/output --model medium --top-k 3 --scoring hybrid --subtitle-lang th --dub-lang th --dub-mode replace
 ```
-
+python -m ai_worker.main --input videos/input/Sam_Altman_Shows_Me_GPT_5_And_Whats_Next.mp4 --output-dir videos/output --model medium --top-k 5 --scoring hybrid --subtitle-lang th --dub-lang th --dub-mode replace
 ## Run
 Put your source file in `videos/input/`, then:
 
