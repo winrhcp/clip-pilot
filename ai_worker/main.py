@@ -87,10 +87,7 @@ def main() -> None:
 
         if args.dub_lang == "th" and args.dub_mode == "replace":
             thai_text = " ".join(seg.text for seg in thai_segments).strip()
-            if not synthesize_thai_voice(thai_text, dubbed_audio):
-                raise RuntimeError(
-                    "Thai dubbing requested but TTS failed. Check LLM_API_KEY/LLM_BASE_URL and TTS_MODEL/TTS_VOICE."
-                )
+            synthesize_thai_voice(thai_text, dubbed_audio)
             replace_audio_track(raw_clip, dubbed_audio, dubbed_clip)
             clip_for_render = dubbed_clip
 
