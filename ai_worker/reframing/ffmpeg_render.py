@@ -33,3 +33,25 @@ def render_vertical_with_subs(input_clip: Path, ass_file: Path, output_clip: Pat
         str(output_clip),
     ]
     subprocess.run(cmd, check=True)
+
+
+def replace_audio_track(input_video: Path, input_audio: Path, output_video: Path) -> None:
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-i",
+        str(input_video),
+        "-i",
+        str(input_audio),
+        "-map",
+        "0:v:0",
+        "-map",
+        "1:a:0",
+        "-c:v",
+        "copy",
+        "-c:a",
+        "aac",
+        "-shortest",
+        str(output_video),
+    ]
+    subprocess.run(cmd, check=True)

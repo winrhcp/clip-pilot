@@ -8,6 +8,7 @@ Local MVP for AI highlight clipping based on your blueprint.
 - Cuts top clips with `ffmpeg`
 - Generates subtitles (`.ass`)
 - Optional Thai subtitle translation (`--subtitle-lang th`)
+- Optional Thai dubbing (`--dub-lang th --dub-mode replace`)
 - Renders 9:16 output clips with burned subtitles
 - Exports `timeline.json`
 
@@ -51,6 +52,12 @@ Thai subtitle output:
 python -m ai_worker.main --input videos/input/your-video.mp4 --output-dir videos/output --model medium --top-k 3 --scoring hybrid --subtitle-lang th
 ```
 
+Thai dubbing (replace source audio):
+
+```powershell
+python -m ai_worker.main --input videos/input/your-video.mp4 --output-dir videos/output --model medium --top-k 3 --scoring hybrid --subtitle-lang th --dub-lang th --dub-mode replace
+```
+
 ## Run
 Put your source file in `videos/input/`, then:
 
@@ -71,6 +78,12 @@ $env:LLM_BASE_URL="https://api.openai.com/v1"
 ```
 
 Thai subtitle translation requires `LLM_API_KEY` as well. If not set, it falls back to source-language subtitles.
+
+Thai dubbing also requires `LLM_API_KEY`. Optional TTS env:
+```powershell
+$env:TTS_MODEL="gpt-4o-mini-tts"
+$env:TTS_VOICE="alloy"
+```
 
 ## Output
 - `videos/output/clip_01.mp4` ...
